@@ -1,0 +1,60 @@
+{
+  "expo": {
+    "name": "TrackOps",
+    "slug": "mobile",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/icon.png",
+    "scheme": "mobile",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#16192A"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "backgroundModes": ["location"],
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "TrackOps needs your location to record your driving route.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "TrackOps uses your location in the background to keep recording your route even when the app is minimized.",
+        "NSLocationAlwaysUsageDescription": "TrackOps uses your location in the background to keep recording your route even when the app is minimized."
+      }
+    },
+    "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE",
+        "FOREGROUND_SERVICE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/images/icon.png"
+    },
+    "plugins": [
+      [
+        "expo-router",
+        {
+          "origin": "https://replit.com/"
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "TrackOps uses your location in the background to keep recording your route even when the app is minimized.",
+          "isAndroidBackgroundLocationEnabled": true,
+          "isAndroidForegroundServiceEnabled": true
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
