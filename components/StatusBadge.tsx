@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { Animated, StyleSheet, Text, View } from "react-native";
 import { useColors } from "@/hooks/useColors";
 import { useNetwork } from "@/contexts/NetworkContext";
+import { getNetworkStatusLabel } from "@/lib/networkStatus";
 
 export function StatusBadge() {
   const colors = useColors();
@@ -31,7 +32,7 @@ export function StatusBadge() {
         ]}
       />
       <Text style={[styles.label, { color: isConnected ? colors.mutedForeground : colors.destructive, fontFamily: "Inter_500Medium" }]}>
-        {isConnected ? "En línea" : "Sin conexión"}
+        {getNetworkStatusLabel(isConnected)}
       </Text>
     </View>
   );

@@ -12,6 +12,10 @@ import React, {
 import { Platform } from "react-native";
 import { LOCATION_TASK_NAME, STORAGE_KEYS } from "@/constants/taskKeys";
 import { TaskManager } from "@/hooks/useTaskManager";
+import {
+  buildTelemetryPayload,
+  postTelemetry,
+} from "@/lib/telemetrySync";
 
 export interface Coordinate {
   id: string;
@@ -58,8 +62,6 @@ interface TrackingContextType {
 }
 
 const TrackingContext = createContext<TrackingContextType | null>(null);
-
-const SERVER_URL = `${process.env.EXPO_PUBLIC_BACKEND_URL || 'http://localhost:3002'}/telemetry/ingest`;
 
 function generateId(): string {
   return Date.now().toString() + Math.random().toString(36).substr(2, 9);
@@ -368,24 +370,9 @@ export function TrackingProvider({ children }: { children: React.ReactNode }) {
       
       for (const coord of pending) {
         try {
-          // Construct payload matching the backend DTO
-          const payload = {
-            vehicleId: driverName || `mobile-${coord.sessionId}`,
-            latitude: coord.latitude,
-            longitude: coord.longitude,
-            speed: coord.speed || 0,
-            engineRpm: coord.engineRpm || 0,
-            fuelLevel: coord.fuelLevel || 100,
-            timestamp: coord.timestamp
-          };
-
-          const response = await fetch(SERVER_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload),
-          });
-          
-          if (response.ok || response.status === 202) {
+          const payload = buildTelemetryPayload(coord, driverName);
+          const accepted = await postTelemetry(payload);
+          if (accepted) {
             syncedIds.add(coord.id);
           }
         } catch (err) {
